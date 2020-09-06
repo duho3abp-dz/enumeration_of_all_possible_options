@@ -11,13 +11,13 @@ const iteratingArray = (array, item) => {
             array.forEach(el => {
                 const p = `${item}-${el}`;
                 newArr = [...newArr, p];
-                iteratingArray(arr, p);
+                iteratingArray(array, p);
             });
         } else { return; }
     } else {
         array.forEach(el => {
             newArr = [...newArr, el];
-            iteratingArray(arr, el);
+            iteratingArray(array, el);
         });
     }
 };
