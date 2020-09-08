@@ -3,7 +3,7 @@
 // ---------------------RECURSIVE-METHOD---------------------
 
 // const arr = ['a', 'b', 'c', 'd', 'e', 'f'],
-const arr = ['a', 'b', 'f', 'i', 'w'],
+const arr = ['a', 'b', 'f', {alias: 'i'}, 'w'],
       arrLength = arr.length;
 let newArr = [],
     i = 0,
@@ -18,12 +18,12 @@ const passTest = (ar, it) => {
     }
 };
 
-const arrTest = (array) => {
-    const clearArr = replaceString(array);
+const strTest = (string, array) => {
+    const clearArr = replaceString(string);
     let newArray = [],
         test = '';
 
-    arr.forEach((str, item) => {
+    array.forEach((str, item) => {
         for (let i = 0; i < clearArr.length; i++) {
             if (clearArr[i] === str) {
                 newArray[item] = clearArr[i];
@@ -39,6 +39,29 @@ const arrTest = (array) => {
     return test;
 };
 
+const arrTest = (array) => {
+    let clearArr = [];
+
+    array.forEach(item => {
+        switch (typeof item) {
+            case 'string':
+                clearArr = [...clearArr, item];
+                break;
+
+            case 'object':
+                for (let key in item) {
+                    clearArr = [...clearArr, item[key]];
+                }
+                break;
+        
+            default:
+                break;
+        }
+    });
+
+    return clearArr;
+};
+
 const iteratingArray = (array, str) => {
     if (str) {
         if (replaceString(str).length < arrLength) {
@@ -48,15 +71,15 @@ const iteratingArray = (array, str) => {
 
                     if (!pass) {
                         const p = `${str}-${item}`;
-                        arrTest(p);
-                        newArr.forEach(itm => { if (replaceString(itm) === arrTest(p)) { repeat = true; } });
+                        strTest(p, array);
+                        newArr.forEach(itm => { if (replaceString(itm) === strTest(p, array)) { repeat = true; } });
 
                         if (!repeat) {
                             newArr[i] = p;
                             i++;
                             pass = false;
                             repeat =false;
-                            iteratingArray(arr, p);
+                            iteratingArray(array, p);
                         }
 
                         repeat =false;
@@ -70,10 +93,11 @@ const iteratingArray = (array, str) => {
         array.forEach(item => {
             newArr[i] = item;
             i++;
-            iteratingArray(arr, item);
+            iteratingArray(array, item);
         });
     }
 };
-iteratingArray(arr);
+
+iteratingArray(arrTest(arr));
 
 console.log(newArr);
